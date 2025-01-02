@@ -64,6 +64,7 @@
             <h2>Agregar Referencia</h2>
             <form id="teacher-form">
                 <input type="text" id="name" placeholder="Nombre del Maestro" required />
+                <input type="text" id="subject" placeholder="Nombre de la Materia" required />
                 <textarea id="reference" placeholder="Escribe tu referencia" required></textarea>
                 <button type="submit">Agregar</button>
             </form>
@@ -80,6 +81,7 @@
                 teacherDiv.classList.add('teacher');
                 teacherDiv.innerHTML = `
                     <h3>${teacher.name}</h3>
+                    <p><strong>Materia:</strong> ${teacher.subject}</p>
                     <p>${teacher.reference}</p>
                 `;
                 teachersDiv.appendChild(teacherDiv);
@@ -89,9 +91,11 @@
         document.getElementById('teacher-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const name = document.getElementById('name').value;
+            const subject = document.getElementById('subject').value;
             const reference = document.getElementById('reference').value;
-            teachers.push({ name, reference });
+            teachers.push({ name, subject, reference });
             document.getElementById('name').value = '';
+            document.getElementById('subject').value = '';
             document.getElementById('reference').value = '';
             renderTeachers();
         });
