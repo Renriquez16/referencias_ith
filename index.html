@@ -56,8 +56,13 @@
         <h1>Referencias de Maestros</h1>
     </header>
     <main>
+        <section id="search">
+            <h2>Buscar Maestro</h2>
+            <input type="text" id="search-input" placeholder="Busca por nombre o materia" />
+            <button id="search-button">Buscar</button>
+        </section>
         <section id="teacher-list">
-            <h2>Lista de Maestros</h2>
+            <h2>Resultados de la Búsqueda</h2>
             <div id="teachers"></div>
         </section>
         <section id="add-teacher">
@@ -71,13 +76,16 @@
         </section>
     </main>
     <script>
-        const renderTeachers = () => {
-    fetch('/api/teachers')
-        .then(response => response.json())
-        .then(teachers => {
+        const teachers = [];
+
+        const renderTeachers = (filter = '') => {
             const teachersDiv = document.getElementById('teachers');
             teachersDiv.innerHTML = '';
-            teachers.forEach(teacher => {
+            const filteredTeachers = teachers.filter(teacher => 
+                teacher.name.toLowerCase().includes(filter.toLowerCase()) ||
+                teacher.subject.toLowerCase().includes(filter.toLowerCase())
+            );
+            filteredTeachers.forEach(teacher => {
                 const teacherDiv = document.createElement('div');
                 teacherDiv.classList.add('teacher');
                 teacherDiv.innerHTML = `
@@ -87,32 +95,26 @@
                 `;
                 teachersDiv.appendChild(teacherDiv);
             });
+        };
+
+        document.getElementById('teacher-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const subject = document.getElementById('subject').value;
+            const reference = document.getElementById('reference').value;
+
+            teachers.push({ name, subject, reference });
+            document.getElementById('name').value = '';
+            document.getElementById('subject').value = '';
+            document.getElementById('reference').value = '';
         });
-};
 
-document.getElementById('teacher-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const subject = document.getElementById('subject').value;
-    const reference = document.getElementById('reference').value;
-
-    fetch('/api/teachers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, subject, reference }),
-    })
-        .then(response => {
-            if (response.ok) {
-                document.getElementById('name').value = '';
-                document.getElementById('subject').value = '';
-                document.getElementById('reference').value = '';
-                renderTeachers();
-            }
+        document.getElementById('search-button').addEventListener('click', () => {
+            const filter = document.getElementById('search-input').value;
+            renderTeachers(filter);
         });
-});
 
-renderTeachers();
-
+        renderTeachers();
     </script>
 </body>
 </html>
