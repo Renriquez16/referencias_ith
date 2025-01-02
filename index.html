@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referencias de Maestros</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            padding: 1rem;
+        }
+        .teacher {
+            background: white;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        form input, form textarea, form button {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Referencias de Maestros</h1>
+    </header>
+    <main>
+        <section id="teacher-list">
+            <h2>Lista de Maestros</h2>
+            <div id="teachers"></div>
+        </section>
+        <section id="add-teacher">
+            <h2>Agregar Referencia</h2>
+            <form id="teacher-form">
+                <input type="text" id="name" placeholder="Nombre del Maestro" required />
+                <textarea id="reference" placeholder="Escribe tu referencia" required></textarea>
+                <button type="submit">Agregar</button>
+            </form>
+        </section>
+    </main>
+    <script>
+        const teachers = [];
+
+        const renderTeachers = () => {
+            const teachersDiv = document.getElementById('teachers');
+            teachersDiv.innerHTML = '';
+            teachers.forEach((teacher, index) => {
+                const teacherDiv = document.createElement('div');
+                teacherDiv.classList.add('teacher');
+                teacherDiv.innerHTML = `
+                    <h3>${teacher.name}</h3>
+                    <p>${teacher.reference}</p>
+                `;
+                teachersDiv.appendChild(teacherDiv);
+            });
+        };
+
+        document.getElementById('teacher-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const reference = document.getElementById('reference').value;
+            teachers.push({ name, reference });
+            document.getElementById('name').value = '';
+            document.getElementById('reference').value = '';
+            renderTeachers();
+        });
+
+        renderTeachers();
+    </script>
+</body>
+</html>
