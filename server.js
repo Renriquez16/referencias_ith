@@ -5,11 +5,11 @@ const app = express();
 const PORT = 3000;
 const DATA_FILE = 'teachers.json';
 
-// Middleware para leer datos JSON
+// Middleware
 app.use(express.json());
 app.use(express.static('public'));
 
-// Endpoint para obtener los datos
+// Endpoint para obtener la lista de maestros
 app.get('/api/teachers', (req, res) => {
     fs.readFile(DATA_FILE, (err, data) => {
         if (err) return res.status(500).send('Error al leer los datos');
@@ -31,7 +31,7 @@ app.post('/api/teachers', (req, res) => {
     });
 });
 
-// Servidor corriendo
+// Inicia el servidor
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
