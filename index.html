@@ -71,12 +71,13 @@
         </section>
     </main>
     <script>
-        const teachers = [];
-
         const renderTeachers = () => {
+    fetch('/api/teachers')
+        .then(response => response.json())
+        .then(teachers => {
             const teachersDiv = document.getElementById('teachers');
             teachersDiv.innerHTML = '';
-            teachers.forEach((teacher, index) => {
+            teachers.forEach(teacher => {
                 const teacherDiv = document.createElement('div');
                 teacherDiv.classList.add('teacher');
                 teacherDiv.innerHTML = `
@@ -86,21 +87,32 @@
                 `;
                 teachersDiv.appendChild(teacherDiv);
             });
-        };
-
-        document.getElementById('teacher-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const subject = document.getElementById('subject').value;
-            const reference = document.getElementById('reference').value;
-            teachers.push({ name, subject, reference });
-            document.getElementById('name').value = '';
-            document.getElementById('subject').value = '';
-            document.getElementById('reference').value = '';
-            renderTeachers();
         });
+};
 
-        renderTeachers();
+document.getElementById('teacher-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const subject = document.getElementById('subject').value;
+    const reference = document.getElementById('reference').value;
+
+    fetch('/api/teachers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, subject, reference }),
+    })
+        .then(response => {
+            if (response.ok) {
+                document.getElementById('name').value = '';
+                document.getElementById('subject').value = '';
+                document.getElementById('reference').value = '';
+                renderTeachers();
+            }
+        });
+});
+
+renderTeachers();
+
     </script>
 </body>
 </html>
